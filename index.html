@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Vite App</title>
+
+    <style>
+        body {
+            font-family: Monospace;
+            background-color: #000;
+            color: #f00;
+            margin: 0px;
+            overflow: hidden;
+            background-color: #fcdee4;
+        }
+        #info {
+            position: absolute;
+            top: 10px;
+            width: 100%;
+            text-align: center;
+        }
+        #loading {
+          margin: auto;
+          text-align: center;
+          font-size: 2em;
+          line-height: 50vh;
+          width: 50%;
+          height: 50vh;
+          padding: 10px;
+        }
+    </style>
+  </head>
+
+  <script type="text/javascript">
+    (
+      function(){
+        var script=document.createElement('script');
+        script.onload=function(){
+          window.stats=new Stats();
+          document.body.appendChild(window.stats.dom);
+          // requestAnimationFrame(
+          //   function loop(){
+          //     stats.update();
+          //     requestAnimationFrame(loop)
+          //   }
+          // );
+        };
+        script.src='//mrdoob.github.io/stats.js/build/stats.min.js';
+        document.head.appendChild(script);
+      }
+    )()
+  </script>
+
+  <body>
+    <div id="loading">
+      <img src="assets/loading-cute.gif"/>
+    </div>
+    <div id="app"></div>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>

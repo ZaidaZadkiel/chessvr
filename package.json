@@ -1,0 +1,17 @@
+{
+  "name": "testing_vr",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite --host --https",
+    "build": "vite build --base=./",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "^2.9.7"
+  },
+  "dependencies": {
+    "three": "^0.140.1",
+    "three-mesh-ui": "^6.4.4"
+  }
+}
