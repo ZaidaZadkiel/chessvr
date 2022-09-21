@@ -31,8 +31,8 @@ const input_settings = {
   ],
   defaults: {
     keyboard: {
-      updown    : { positive: [38, 87], negative: [40, 83] },
-      leftright : { positive: [37, 65], negative: [39, 68] },
+      updown    : { positive: [40, 83], negative: [38, 87] },
+      leftright : { positive: [39, 68], negative: [37, 65] },
       rotateview: { positive: [69],     negative: [81]},
       action    : { positive: [13]},
       cancel    : { positive: [27]},
@@ -40,24 +40,54 @@ const input_settings = {
       lookaround: { positive: [32]},
     },
     gamepad: {
-      updown    : { positive: [-1], negative: [-1] },
-      leftright : { positive: [-0], negative: [-0] },
+      updown    : { positive: [ 1], negative: [ 1] },
+      leftright : { positive: [ 0], negative: [ 0] },
       rotateview: { positive: [ 2], negative: [ 2]},
       action    : { positive: [ 2]},
       cancel    : { positive: [ 1]},
+      userlist  : { positive: [100]},
+      lookaround: { positive: [32]},
     },
     xrcontrol: { // ???
-      updown    : { positive: [ 1], negative: [ 1] },
-      leftright : { positive: [-0], negative: [-0] },
-      action    : { positive: [ 0]},
-      cancel    : { positive: [ 1]},
+      // rotateview: {
+      //     left: { positive: [ 0], negative: [ 0]},
+      //     right: { positive: [ 0], negative: [ 0]},
+      // },
+      action: {
+          // left : { positive: [ 0] },
+          right: { positive: [ 0] }
+      },
+      cancel: {
+          // left : { positive: [ 1] },
+          right: { positive: [ 1] }
+      },
+      userlist: {
+          left : { positive: [ 0] },
+          // right: { positive: [ 9] }
+      },
+      lookaround: {
+          left : { positive: [ 2], negative: [ 2] },
+      },
+      updown: {
+          right: { positive: [ 3], negative: [ 3]  }
+      },
+      leftright: {
+          right: { positive: [ 2], negative: [ 2] } ,
+      }
     }
   }
 };
 
-addEvent(constants.inputdevice_events.changed,     (e)=>console.log("main", e) );
-addEvent(constants.inputdevice_events.action,      (e)=>console.log("main", e) );
-addEvent(constants.inputdevice_events.action_down, (e)=>console.log("main", e) );
+
+let inputstate = {}
+function handle_action(e){
+  // console.log("handle:", e)
+  inputstate = e;
+}
+
+addEvent(constants.inputdevice_events.changed, handle_action);
+// addEvent(constants.inputdevice_events.action,      (e)=>console.log("main: action",      e) );
+// addEvent(constants.inputdevice_events.action_down, (e)=>console.log("main: action_down", e) );
 
 Promise.all(
   [
@@ -76,8 +106,7 @@ function setup(){
   scene.setup(board, update).then(
     world=>{
 
-      const canvases = document.getElementsByTagName("canvas");
-      console.log(canvases)
+      const canvases  = document.getElementsByTagName("canvas");
       const texcanvas = canvases[0].getContext('2d');
       const canvasmat = new THREE.MeshBasicMaterial({
         map: new THREE.CanvasTexture(texcanvas.canvas),
@@ -85,23 +114,32 @@ function setup(){
 
       let plane = new THREE.Mesh( new THREE.PlaneGeometry( 1, 1 ), canvasmat );
       plane.position.set(0,1,0)
-      console.log(world);//.add(plane);
       world.add(plane);
-  }
+    }
   );
 }
 
 function show_error(e){console.error(e)}
 
 
-const clock = new THREE.Clock();
-let delta=0;
-function update(time){
-  if(window.stats) window.stats.update();
+const clock    = new THREE.Clock();
+let   delta    =  0;
+const speed    =  30;
+const rotspeed = -3;
 
+function update(time){
+
+  if(window.stats){ window.stats.update(); }
   input.poll_gamepads()
   delta = clock.getDelta()
-  scene.dolly.rotation.y+=(delta*0.05);
-  // console.log(data)
+
+  let lr = ( (inputstate.leftright   || 0) * delta) * speed
+  let fb = ( (inputstate.updown      || 0) * delta) * speed
+  let rv = ( (inputstate.rotateview  || 0) * delta) * rotspeed
+
+  scene.dolly.translateX(lr);
+  scene.dolly.translateZ(fb);
+  scene.dolly.rotateY   (rv);
+
   return ;
 }

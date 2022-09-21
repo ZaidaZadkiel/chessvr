@@ -1,6 +1,5 @@
 import { inputdevice_events }       from '../constants';
 import { notifyEvent }              from '../events';
-import { readVRGamepad }            from './xrcontrol'
 import {
   gamepad_mapping,
   input_actions
@@ -27,7 +26,6 @@ function poll_gamepads() {
   // console.log({gamepads});
 
   if(gamepads && gamepads[current_gamepad]) return readGamepad();
-  return readVRGamepad();
 }
 
 function readGamepad(){
@@ -40,7 +38,7 @@ function update_input_state(gp_mapping, gp) {
 
   for (var action of input_actions) {
     if(!gp_mapping[action]) {
-      // console.warn(`action: '${action}' was not found in mapping object, this is a noop`);
+      console.warn(`action: '${action}' was not found in mapping object, this is a noop`);
       continue;
     }
 
@@ -54,10 +52,14 @@ function update_input_state(gp_mapping, gp) {
           ? -1                        // cast (-0) -> -1
           : Math.sign(pos[i]||1)      // 1 | -1, casts 0->1
       );
+
+      //if pos[i] is a number outside of gp.buttons length return 0
+      let v = (gp.buttons[Math.abs(pos[i])] && gp.buttons[Math.abs(pos[i])].value) || 0;
+
       if( neg && Number.isInteger(neg[i]) ){ //axis has both negative and positive
         input_frame[action] = invert * Math.round(gp.axes   [Math.abs(neg[i])] * 2 ) / 2;
       } else {      //button has only positive on/off
-        input_frame[action] = invert *            gp.buttons[Math.abs(pos[i])].value
+        input_frame[action] = invert * v
       }
     }
     // if(gp_mapping[action].invert) input_frame[action] *= -1; //invert sign

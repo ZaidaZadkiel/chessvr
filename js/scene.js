@@ -245,10 +245,10 @@ function init() {
     // camera
     var ratio = window.innerWidth/window.innerHeight;
     camera = new THREE.PerspectiveCamera(45,ratio,0.1,3000);
-    camera.position.set(90,90,90); //initial position of the camera
-    camera.lookAt(0,0,0);
+    camera.position.set(0,0,0); //initial position of the camera
+    // camera.lookAt(0,0,0);
 
-    dolly.position.set(1,1,1);
+    dolly.position.set(0,2,0);
     dolly.add(camera);
     world.add(dolly);
 //
@@ -272,13 +272,13 @@ function init() {
     light.shadow.camera.near   =  5;
 		light.shadow.camera.far    =  3000;
 		light.shadow.mapSize .set( 1024, 1024 );
-    light.target.position.set(0, 0, 0);
+    light.target.position.set( 0,    0,   0);
 
     helper = new THREE.DirectionalLightHelper( light, 5 );
     world.add(helper);
     world.add(light);
-    world.add( light.target );
-//
+    world.add(light.target);
+
     helper.parent.updateMatrixWorld();
     helper.update();
 
@@ -371,7 +371,6 @@ function init() {
 //     StartGame(pgn);
 }
 
-//
 // //variables to keep the models in memory
 var model_pawn      = null;
 var model_knight    = null;
@@ -479,13 +478,6 @@ function loadModels(){
           model_queen  = imboard.getObjectByName("QUEEN");
           model_king   = imboard.getObjectByName("KING");
           model_bishop = imboard.getObjectByName("BISHOP");
-          // model_board  = gltf.scene.getObjectByName("BOARD");
-          // model_pawn   = gltf.scene.getObjectByName("PAWN");
-          // model_knight = gltf.scene.getObjectByName("KNIGHT");
-          // model_rook   = gltf.scene.getObjectByName("ROOK");
-          // model_queen  = gltf.scene.getObjectByName("QUEEN");
-          // model_king   = gltf.scene.getObjectByName("KING");
-          // model_bishop = gltf.scene.getObjectByName("BISHOP");
 
           // console.log({
           //   imboard,
@@ -511,30 +503,15 @@ function loadModels(){
             // x.receiveShadow = false;
           })
 
-          // console.log("loled all")
-
           document.getElementById("loading").remove();
           ok();
-          // setTimeout(
-          //   ()=>{
-          //   },
-          //   5000
-          // )
         }
       );
     }
   );
 
 }
-//
-// function StorePGN(pgn) {
-//     // "1. e4 Nf6 2. f3 e5" becomes [1., e4, Nf6, 2., f3, e5]
-//     var moveArray;
-//     moveArray = pgn.split(/\s+/);
-//     return moveArray;
-// }
-//
-//
+
 function CreatePiece(color, model, name, row, column) {
   // console.log(color, model, name, row, column)
   // creates a piece cloning the model and set to a position in row, column
@@ -580,8 +557,6 @@ function CreatePiece(color, model, name, row, column) {
     // new THREE.Box3().setFromObject(pieces[name]));
 }
 
-//
-//
 
 function PlacePieces() {
   // two-loop for assigning each piece in the board
@@ -608,19 +583,7 @@ function PlacePieces() {
 //
 
 function StartGame(pgnArray) {
-  // this should figure the initial position of the board from the pgnArray String (not implemented)
-  // should set up the board array with the proper positions
   board = pgnArray;
-  // for (var i = 0; i < pgnArray.length; i++) {
-  //   // ignore the 1., 2. elements
-  //   var colour = "white";
-  //   if (i % 3 == 0|| i == 0) continue;
-  //
-  //   // CheckCommand(pgnArray[i], colour);
-  //   colour = (colour == "white") ? "black": "white";
-  // }
-  //
-  // place the pieces according to the board array
   PlacePieces();
 }
 //

@@ -110,11 +110,43 @@ function push_input_state(input_frame){
 addEvent(
   inputdevice_events.connected,
   (e)=>{
-    console.log("state: input connected", e);
-    if(e.keyboard)  { keyboard_enabled  = true; }
-    if(e.gamepad)   { gamepad_enabled   = true; }
-    if(e.xrcontrol) { xrcontrol_enabled = true; }
-    // n[0]
+    console.log(
+      "state: input connected",
+      {
+        "keyboard" : e.keyboard,
+        "gamepad"  : e.gamepad,
+        "xrcontrol": e.data && e.data.gamepad
+      },
+      "event", e
+    );
+
+    if(e.keyboard)               { console.log("keyboard_enabled?", keyboard_enabled  = true) }
+    if(e.gamepad)                { console.log("gamepad_enabled?", gamepad_enabled   = true) }
+    if(e.data && e.data.gamepad) { console.log("xrcontrol_enabled?", xrcontrol_enabled = true) }
+
+    if(xrcontrol_enabled){
+        console.log(
+          {
+            id        : e.data.gamepad.id,
+            buttons   : e.data.gamepad.buttons.length,
+            axis      : e.data.gamepad.axes.length,
+            handedness: e.data.handedness,
+          },
+          e.gamepad
+        )
+    }
+
+    if(gamepad_enabled){
+        console.log(
+          {
+            id        : e.gamepad.id,
+            buttons   : e.gamepad.buttons.length,
+            axis      : e.gamepad.axes.length,
+            handedness: e.data.handedness,
+          },
+          e.gamepad
+        )
+    }
   }
 );
 

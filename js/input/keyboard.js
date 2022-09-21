@@ -23,6 +23,8 @@ function set_keyboard_state(event){
   let   action       = ""
   let   action_count = 0;
 
+  // console.log("keyboard", event)
+
   for (var i = 0; i < len; i++) {
     // console.log(i, input_actions[i])
     action = input_actions[i];
@@ -60,10 +62,9 @@ function set_keyboard_state(event){
 
 
 function onDocumentKeyUp(event) {
-  event.preventDefault();
 
   keyboard_keys[event.keyCode] = false;
-  set_keyboard_state(event);
+  if(set_keyboard_state(event)) event.preventDefault();
 
   return notifyEvent( inputdevice_events.action, event);
 }
@@ -76,9 +77,9 @@ function onDocumentKeyDown(event) {
     return true;
   }
 
-  event.preventDefault();
   keyboard_keys[event.keyCode] = true;
-  set_keyboard_state(event);
+  if(set_keyboard_state(event)) event.preventDefault();
+
   return notifyEvent( inputdevice_events.action_down, event);
 }
 

@@ -35,10 +35,10 @@ function init(renderer, options){
   if(Boolean(_opt.keyboard)  === true) { keyboard.input_init();  }
   if(Boolean(_opt.gamepad)   === true) { gamepad.input_init();   }
   if(Boolean(_opt.xrcontrol) === true) {
-    if(Boolean(renderer) == false) throw Error("xr must be present when xrcontrol enabled");
-    console.log("renderer for xr")
-    if(!renderer)    throw Error("No puede activarse control XR sin renderer");
-    if(!renderer.xr) throw Error("Modo XR no esta activado en renderer");
+    // console.log("renderer for xr")
+    if(!Boolean(renderer))    throw Error("renderer must be present when xrcontrol enabled");
+    if(!Boolean(renderer.xr)) throw Error("Modo XR no esta activado en renderer");
+
     xrcontrol.input_init(renderer);
   }
 
@@ -46,17 +46,21 @@ function init(renderer, options){
 }
 
 function poll_gamepads(){
-  // console.log("hi")
-  gamepad.poll_gamepads();
-  // xrcontrol.poll_gamepads()
+  console.log(
+    "poll_gamepads",
+    "gamepad",   state.gamepad_enabled,
+    "xrcontrol", state.xrcontrol_enabled)
+
+  if(state.gamepad_enabled)   gamepad.poll_gamepads();
+  if(state.xrcontrol_enabled) xrcontrol.readVRGamepad()
 }
 
 export const input = {
   actions,
+  state,
+  init,
   gamepad,
   keyboard,
-  state,
   xrcontrol,
-  init,
-  poll_gamepads: gamepad.poll_gamepads
+  poll_gamepads
 }
