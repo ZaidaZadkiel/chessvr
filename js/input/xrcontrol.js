@@ -55,7 +55,7 @@ function readVRGamepad(){
 
   for (var action of input_actions) {
     let mapping = xrcontrol_mapping[action];
-    console.log({action})
+    // console.log({action}, xrcontrol_mapping, input_actions)
 
     if(!mapping) {
       console.warn(`action: '${action}' was not found in mapping object, this is a noop`);
@@ -73,28 +73,30 @@ function readVRGamepad(){
     for(side=0; side<2 ; side++){
       hand_actionmap = hands_action[ side ]
       if(!hand_actionmap){
-        console.log(`${action} has no ${side==0 ? "left" : "right"} mapping`);
+        // console.log(`${action} has no ${side==0 ? "left" : "right"} mapping`);
         continue;
       }
+
+      // console.log({action, hand_actionmap, side})
     // while(  != null ){  // what in the C
       // console.log({hand_actionmap, hands_action, side}, hands_gp)
 
       const neg    = hand_actionmap.negative; //button/axis index for negative value
       const pos    = hand_actionmap.positive; //button/axis index for positive value
       const poslen = pos.length; // negative can not exist; positive must always exist
+      let   invert = 1; // invert axis
       const type   = (neg && pos)
                         ? AXIS // axis have positive and negative axis
                         : BUTTON // button can have only positive value or zero
 
-      let   invert = 1;
 
       for (var i = 0; i < poslen; i++) {
-        console.log(
-          action,
-          {i, type, poslen, pos, neg},
-          type===AXIS ? "axis" : "buttan",
-          type===AXIS ? hands_gp[side].axes[i] : ( (hands_gp[side].buttons[i]) ? hands_gp[side].buttons[i].value : "OOB" )
-        )
+        // console.log(
+        //   action,
+        //   {i, type, poslen, pos, neg},
+        //   type===AXIS ? "axis" : "buttan",
+        //   type===AXIS ? hands_gp[side].axes[i] : ( (hands_gp[side].buttons[i]) ? hands_gp[side].buttons[i].value : "OOB" )
+        // )
 
         invert =  (Object.is(pos[i], -0) // check for exact value -0
                       ? -1                        // cast (-0) -> -1
@@ -130,7 +132,7 @@ function readVRGamepad(){
   }
 
   if(change>0) {
-    console.log(input_frame, hands_gp)
+    // console.log(input_frame, hands_gp)
     push_input_state(input_frame);
     last_gamepad_state = input_frame;
   }

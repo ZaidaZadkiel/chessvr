@@ -46,10 +46,10 @@ function init(renderer, options){
 }
 
 function poll_gamepads(){
-  console.log(
-    "poll_gamepads",
-    "gamepad",   state.gamepad_enabled,
-    "xrcontrol", state.xrcontrol_enabled)
+  // console.log(
+  //   "poll_gamepads",
+  //   "gamepad",   state.gamepad_enabled,
+  //   "xrcontrol", state.xrcontrol_enabled)
 
   if(state.gamepad_enabled)   gamepad.poll_gamepads();
   if(state.xrcontrol_enabled) xrcontrol.readVRGamepad()

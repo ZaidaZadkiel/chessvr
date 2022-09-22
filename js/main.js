@@ -49,10 +49,10 @@ const input_settings = {
       lookaround: { positive: [32]},
     },
     xrcontrol: { // ???
-      // rotateview: {
+      rotateview: {
       //     left: { positive: [ 0], negative: [ 0]},
       //     right: { positive: [ 0], negative: [ 0]},
-      // },
+      },
       action: {
           // left : { positive: [ 0] },
           right: { positive: [ 0] }
